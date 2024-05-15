@@ -1,17 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:todo_list/models/todos.dart';
 
-// class DataState extends Equatable {
-//   final List<Todos> data;
-
-//   const DataState(this.data);
-
-//   @override
-//   List<Object?> get props => [data];
-// }
-
-// Define the Bloc state
-abstract class DataState {}
+sealed class DataState extends Equatable {
+  const DataState();
+  
+  @override
+  List<Object> get props => [];
+}
 
 class TodoInitial extends DataState {}
 
@@ -20,21 +15,18 @@ class TodoLoading extends DataState {}
 class TodoLoaded extends DataState {
   final List<Todos> data;
 
-  TodoLoaded(this.data);
-
-  // @override
-  // List<Object?> get props => [data];
+  const TodoLoaded(this.data);
 }
 
 class TodoSuccess extends DataState {
   final String id;
   final String description;
 
-  TodoSuccess(this.id, this.description);
+  const TodoSuccess(this.id, this.description);
 }
 
 class TodoFailure extends DataState {
   final String description;
 
-  TodoFailure(this.description);
+  const TodoFailure(this.description);
 }

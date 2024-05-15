@@ -84,9 +84,6 @@ class EditDataBloc extends Bloc<EditDataEvent, EditDataState> {
             'description': event.description,
           },
           onCompleted: (dynamic resultData) {
-            print(event.id);
-            print(event.name);
-            print(event.description);
             print("edit");
             print(resultData);
           },
