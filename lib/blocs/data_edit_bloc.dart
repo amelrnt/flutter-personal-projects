@@ -8,9 +8,24 @@ import '../states/data_edit_state.dart';
 
 class EditDataBloc extends Bloc<EditDataEvent, EditDataState> {
   EditDataBloc() : super(EditDataInitial()) {
-    on<EditDataEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    // on<EditDataEvent>((event, emit){
+    //   TODO: implement event handler
+    //     emit(EditDataLoading());
+    //     await Future.delayed(const Duration(seconds: 3), () async {
+    //       data = await homePageRepo.fetchDetails(event.name, event.job);
+    //       emit(HomepageLoaded(data));
+    //     });
+    // });
+  }
+
+  @override
+  Stream<EditDataState> mapEventToState(EditDataEvent event) async* {
+    if (event is AddDataEvent) {
+      yield* mapAddTodoToState(event);
+    }
+    if (event is PostDataEvent) {
+      yield* mapEditTodoToState(event);
+    }
   }
 
   Stream<EditDataState> mapAddTodoToState(AddDataEvent event) async* {
@@ -39,7 +54,6 @@ class EditDataBloc extends Bloc<EditDataEvent, EditDataState> {
         throw result.exception!;
       }
 
-      // final data = result.data!['insert_todos_one'];
       final Todos data = result.data?['insert_todos_one'];
       print("add");
       print(data);
@@ -51,8 +65,8 @@ class EditDataBloc extends Bloc<EditDataEvent, EditDataState> {
 
   Stream<EditDataState> mapEditTodoToState(PostDataEvent event) async* {
     const String mutation = '''
-        mutation InsertTodo(\$name: String!, \$description: String!) {
-          insert_todos_one(object: {name: \$name, description: \$description}) {
+        mutation UpdateTodoByPk(\$id: Int!,\$name: String!, \$description: String!) {
+          update_todos_by_pk(pk_columns: {id: \$id}, _set: {name: \$name, description: \$description}) {
             id
             name
             description
@@ -69,6 +83,13 @@ class EditDataBloc extends Bloc<EditDataEvent, EditDataState> {
             'name': event.name,
             'description': event.description,
           },
+          onCompleted: (dynamic resultData) {
+            print(event.id);
+            print(event.name);
+            print(event.description);
+            print("edit");
+            print(resultData);
+          },
         ),
       );
 
@@ -76,7 +97,6 @@ class EditDataBloc extends Bloc<EditDataEvent, EditDataState> {
         throw result.exception!;
       }
 
-      // final data = result.data!['insert_todos_one'];
       final Todos data = result.data?['update_todos_by_pk'];
       print("edit");
       print(data);

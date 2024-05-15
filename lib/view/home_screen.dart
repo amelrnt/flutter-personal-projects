@@ -85,11 +85,12 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: on back after this page then get data again
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const DetailScreen()),
-          );
+          ).then((value) {
+            dataBloc.add(GetDataEvent());
+          });
         },
         child: const Icon(Icons.add),
       ),

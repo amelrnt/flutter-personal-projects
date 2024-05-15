@@ -12,6 +12,8 @@ sealed class EditDataState extends Equatable {
 
 final class EditDataInitial extends EditDataState {}
 
+final class EditDataLoading extends EditDataState {}
+
 class EditDataSuccess extends EditDataState{
   final Todos data;
 
